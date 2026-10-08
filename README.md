@@ -41,7 +41,7 @@ resultado = Decimal(x_px) / CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA   # ou seja: x ÷ 
 | Auditoria de reversibilidade | Toda divisão é conferida na saída: se `resultado × 16 ≠ original`, a produção **para** e dispara `PixelInimaginavelError`. Nunca disparou. Nunca vai. A gente confere mesmo assim. |
 | Logging com carimbo de hora | Rastreabilidade total. Sabemos *exatamente* quando o `21.5px` virou `1.34375rem`. (Foi às 18:40:22. Momento lindo.) |
 | Modo `--dramatico` | Narra cada divisão como um lançamento de foguete, com pausa dramática de 0,45s por pixel. |
-| Suíte com 13 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
+| Suíte com 14 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
 
 ## Como operar a planta
 
@@ -61,7 +61,7 @@ python3 -m unittest testes_da_refinaria -v   # auditoria externa independente
 │   ├── style.px.css ............... minério bruto — fonte da verdade, em px
 │   └── style.css .................. produto refinado — GERADO, não editar
 ├── refinaria_de_pixels.py ......... a planta industrial inteira
-└── testes_da_refinaria.py ......... auditoria externa (13 testes)
+└── testes_da_refinaria.py ......... auditoria externa (14 testes)
 ```
 
 ## Regras de segurança da planta industrial
@@ -69,7 +69,7 @@ python3 -m unittest testes_da_refinaria -v   # auditoria externa independente
 1. **NUNCA edite `styles/style.css` à mão.** Ele é um artefato gerado, carimbado com selo de qualidade ISO-0625. Editar à mão é contrabando de unidades.
 2. Quer mudar uma medida? Edite o minério (`styles/style.px.css`) **em px, como a natureza os criou**, e recompile.
 3. Se o W3C um dia mudar o font-size padrão dos navegadores, altere a `CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA` e recompile o império. Uma linha. É por isso que tudo isto existe. *É. Por. Isso.*
-4. Capacete é obrigatório ao ler o regex `(\d+(?:\.\d+)?)px\b`.
+4. Capacete é obrigatório ao ler o regex `(\d*\.?\d+)px\b`.
 
 ## Números do último lote (nº 0001)
 
@@ -130,6 +130,40 @@ Zero. Todos foram refinados com dignidade e seguem vivos no `style.px.css`, que 
 Este é o portfólio do curso 3 de HTML/CSS (aula 5), cujo exercício real é trocar unidades absolutas (`px`) por relativas (`rem`). A regra é simples: **1rem = font-size do elemento raiz**, que por padrão é 16px em todos os navegadores — logo, `rem = px ÷ 16`. Usar `rem` torna o site acessível: quem aumenta a fonte no navegador vê todo o layout escalar junto, em vez de textos espremidos em caixas fixas.
 
 O script faz exatamente o que a aula pede, em todas as 16 medidas do CSS, com resultado matematicamente exato — ele só escolheu, deliberadamente, o caminho mais longo possível até lá.
+
+## Estado, estrutura e como usar (sem piada)
+
+- **O que é:** portfólio fictício ("Joana Santos") do curso de HTML/CSS da Alura, aula 5 (px → rem),
+  mais o script Python que gera o CSS em `rem`.
+- **Estado:** completo para o que a aula pede. `styles/style.css` está em sincronia com
+  `styles/style.px.css` (conferido em 08/10/2026 regerando e comparando).
+- **Ver o site:** abra `index.html` no navegador. **Regerar o CSS:** `python3 refinaria_de_pixels.py`
+  (Python 3.7+, só biblioteca padrão). **Testes:** `python3 -m unittest testes_da_refinaria -v`.
+- **Tecnologias:** HTML5, CSS3 (custom properties, flexbox, BEM), Python (`re`, `decimal`,
+  `functools.lru_cache`, `argparse`, `logging`, `unittest`).
+
+### Revisão de 08/10/2026
+
+- Regex não pegava `.5px` (sem zero na frente): gerava `.0.3125rem`, CSS inválido. Corrigido + teste novo.
+- No Windows, com a saída redirecionada (`> log.txt` ou pipe), a moldura `╔═╗` derrubava o script com
+  `UnicodeEncodeError` antes de gerar o CSS. Agora caracteres que o console não suporta viram `?`.
+
+### Pendências
+
+- Os links de redes sociais em `index.html` ainda apontam para os perfis dos instrutores do curso
+  (template da Alura), não para os seus.
+- O regex também converteria `px` dentro de nomes, como `icone-24px.png` → `icone-1.5rem.png`. Não ocorre
+  neste CSS; se ocorrer, exigir que antes do número não haja letra/hífen.
+
+### Para estudar
+
+1. **`rem` x `px` e acessibilidade** — compare `styles/style.px.css` com `styles/style.css`; depois mude o
+   tamanho de fonte padrão do navegador (não o zoom) e veja qual dos dois escala.
+2. **Expressões regulares com grupo de captura** — `GARIMPO_DE_PIXEL` (`refinaria_de_pixels.py`, linha 54) e
+   `re.sub` com função em `refinar_documento()` (linha 122): a função recebe cada `Match` e devolve o texto novo.
+3. **`Decimal` x `float`** — `calcular_x_px_dividido_por_16_px()` (linha 78). Rode `0.1 + 0.2` e
+   `Decimal("0.1") + Decimal("0.2")` no Python para ver por que existe.
+4. **Memoização com `lru_cache`** — decorador na linha 77 e o teste `test_o_cache_trabalha_para_nao_dividir_duas_vezes`.
 
 ---
 
