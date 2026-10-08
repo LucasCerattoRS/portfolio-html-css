@@ -88,6 +88,10 @@ class TestLinhaDeProducao(unittest.TestCase):
         refinado = LinhaDeProducao().refinar_documento(css)
         self.assertEqual(css, refinado, "a refinaria só processa px, senhores")
 
+    def test_meio_pixel_sem_zero_na_frente_nao_vira_lixo(self):
+        refinado = LinhaDeProducao().refinar_documento("a{border:.5px solid;}")
+        self.assertEqual(refinado, "a{border:0.03125rem solid;}")
+
     def test_o_relatorio_de_contagem_bate_com_a_producao(self):
         linha = LinhaDeProducao()
         linha.refinar_documento("p{margin:24px;padding:24px;gap:8px;}")

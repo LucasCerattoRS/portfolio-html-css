@@ -49,7 +49,9 @@ getcontext().prec = 28
 CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA = Decimal("16")
 
 # Detector de pixels brutos na natureza: "24px", "21.5px", "615px"...
-GARIMPO_DE_PIXEL = re.compile(r"(\d+(?:\.\d+)?)px\b")
+# (\d*\.?\d+) também aceita ".5px": com \d+ na frente o ponto ficava de fora
+# e ".5px" virava ".0.3125rem" (CSS inválido).
+GARIMPO_DE_PIXEL = re.compile(r"(\d*\.?\d+)px\b")
 
 # Número de vezes que tudo isto poderia ter sido um Ctrl+H:
 OPORTUNIDADES_IGNORADAS = float("inf")
@@ -226,6 +228,12 @@ def main(argv: list[str] | None = None) -> int:
         help="narra cada divisão como um lançamento de foguete",
     )
     args = parser.parse_args(argv)
+
+    # No Windows com saída redirecionada (pipe/arquivo) o console é cp1252 e a
+    # moldura ╔═╗ derrubava o script com UnicodeEncodeError ANTES de refinar.
+    for fluxo in (sys.stdout, sys.stderr):
+        if hasattr(fluxo, "reconfigure"):
+            fluxo.reconfigure(errors="replace")
 
     logging.basicConfig(
         level=logging.INFO,
