@@ -148,6 +148,16 @@ O script faz exatamente o que a aula pede, em todas as 16 medidas do CSS, com re
 - No Windows, com a saída redirecionada (`> log.txt` ou pipe), a moldura `╔═╗` derrubava o script com
   `UnicodeEncodeError` antes de gerar o CSS. Agora caracteres que o console não suporta viram `?`.
 
+### Auditoria de acessibilidade/mobile de 16/10/2026
+
+- Defeito 1: rolagem horizontal em telas ≤ 1000px (larguras fixas de 615px/378px; `scrollWidth` 920 em viewport de 320px).
+  Corrigido com `@media (max-width: 1000px)` (coluna única, larguras fluidas) e `img { max-width: 100% }`.
+- Defeito 2: anel de foco do teclado quase invisível sobre o fundo preto (computava `rgb(16,16,16)`).
+  Corrigido com `a:focus-visible` em 3px na cor terciária. As correções estão em `style.px.css`; `style.css` foi regerado.
+- Smoke test headless (sem janela): `NODE_PATH=<node_modules com playwright> node smoke_acessibilidade.js`.
+- Limites: não medi contraste de todas as combinações nem usei leitor de tela; as fontes do Google não carregam offline
+  (usa fonte de fallback); links sociais continuam do template (ver pendências).
+
 ### Pendências
 
 - Os links de redes sociais em `index.html` ainda apontam para os perfis dos instrutores do curso

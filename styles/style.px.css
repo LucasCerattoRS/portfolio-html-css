@@ -97,3 +97,36 @@ body{
     font-size: 24px;
     font-weight: 400;
 }
+/* Acessibilidade: foco visível por teclado (o anel padrão some no fundo preto) */
+a:focus-visible{
+    outline: 3px solid var(--cor-terciaria);
+    outline-offset: 4px;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile/tablet: sem largura fixa que estoure a tela, sem rolagem horizontal */
+@media (max-width: 1000px){
+    .cabecalho{
+        padding: 4% 8% 0% 8%;
+    }
+    .cabecalho__menu{
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .apresentacao{
+        padding: 5% 8%;
+        flex-direction: column;
+        gap: 40px;
+    }
+    .apresentacao__conteudo{
+        width: 100%;
+    }
+    .apresentacao__links__link{
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
