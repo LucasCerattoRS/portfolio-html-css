@@ -195,9 +195,20 @@ def relatorio_de_producao(linha: LinhaDeProducao, duracao: float, saida: Path) -
     LOG.info("idas à calculadora poupadas ... %d", total)
     LOG.info("produto entregue em ........... %s", saida)
 
-    if total == 16:
-        LOG.info("nota do turno: 16 medidas divididas por 16. "
-                 "O universo piscou pra gente.")
+    # A própria contagem do lote passa pelo Núcleo Matemático (com auditoria).
+    # No lote de 16 medidas deu 1rem cravado e o universo piscou pra gente;
+    # o PR de acessibilidade trouxe mais 5 e a piscadela agora espera o
+    # próximo múltiplo de 16.
+    if total:
+        em_rem = polir_para_exibicao(calcular_x_px_dividido_por_16_px(str(total)))
+        nota = f"nota do turno: {total} medidas ÷ 16 = {em_rem}rem de medidas. "
+        sobra = total % int(CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA)
+        if sobra == 0:
+            LOG.info(nota + "O universo piscou pra gente.")
+        else:
+            faltam = int(CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA) - sobra
+            LOG.info(nota + "Número quebrado; o universo não piscou. "
+                     "Faltam %d medidas para a próxima piscadela.", faltam)
 
     LOG.info("─" * 58)
     LOG.info("a refinaria agradece. Volte sempre que o navegador "
