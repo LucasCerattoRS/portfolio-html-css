@@ -10,12 +10,14 @@ Rodar a auditoria externa:
 
 import unittest
 from decimal import Decimal
+from pathlib import Path
 
 from refinaria_de_pixels import (
     CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA,
     LinhaDeProducao,
     calcular_x_px_dividido_por_16_px,
     polir_para_exibicao,
+    relatorio_de_producao,
 )
 
 
@@ -98,6 +100,33 @@ class TestLinhaDeProducao(unittest.TestCase):
         self.assertEqual(linha.auditorias_aprovadas, 3)
         self.assertEqual(linha.contagem["24px"], 2)
         self.assertEqual(linha.contagem["8px"], 1)
+
+
+class TestNotaDoTurno(unittest.TestCase):
+    """O easter egg também passa pela refinaria: a contagem vira rem."""
+
+    def _nota(self, total):
+        linha = LinhaDeProducao()
+        linha.refinar_documento("a{margin:8px;}" * total)
+        with self.assertLogs("refinaria", level="INFO") as log:
+            relatorio_de_producao(linha, 0.0, Path("style.css"))
+        return [m for m in log.output if "nota do turno" in m]
+
+    def test_lote_de_16_vira_1rem_e_o_universo_pisca(self):
+        (nota,) = self._nota(16)
+        self.assertIn("16 medidas ÷ 16 = 1rem de medidas", nota)
+        self.assertIn("O universo piscou pra gente.", nota)
+
+    def test_lote_de_21_vira_1_3125rem_e_o_universo_fica_devendo(self):
+        (nota,) = self._nota(21)
+        self.assertIn("21 medidas ÷ 16 = 1.3125rem de medidas", nota)
+        self.assertNotIn("piscou pra gente", nota)
+        self.assertIn("Faltam 11 medidas", nota)
+
+    def test_lote_de_32_pisca_de_novo(self):
+        (nota,) = self._nota(32)
+        self.assertIn("= 2rem de medidas", nota)
+        self.assertIn("O universo piscou pra gente.", nota)
 
 
 if __name__ == "__main__":

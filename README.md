@@ -1,6 +1,6 @@
 # Portfólio HTML & CSS — agora com Refinaria de Pixels S.A.™
 
-`[ build: passing ]` `[ divisões por 16: 16/16 ]` `[ pixels feridos: 0 ]` `[ over-engineering: 100% ]`
+`[ build: passing ]` `[ divisões por 16: 21/21 ]` `[ pixels feridos: 0 ]` `[ over-engineering: 100% ]`
 
 > A aula 5 pedia: *"troque as medidas de `px` para `rem`"*.
 > Qualquer pessoa faria isso com uma calculadora. Ou de cabeça. Ou com Ctrl+H.
@@ -41,7 +41,7 @@ resultado = Decimal(x_px) / CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA   # ou seja: x ÷ 
 | Auditoria de reversibilidade | Toda divisão é conferida na saída: se `resultado × 16 ≠ original`, a produção **para** e dispara `PixelInimaginavelError`. Nunca disparou. Nunca vai. A gente confere mesmo assim. |
 | Logging com carimbo de hora | Rastreabilidade total. Sabemos *exatamente* quando o `21.5px` virou `1.34375rem`. (Foi às 18:40:22. Momento lindo.) |
 | Modo `--dramatico` | Narra cada divisão como um lançamento de foguete, com pausa dramática de 0,45s por pixel. |
-| Suíte com 14 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
+| Suíte com 17 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
 
 ## Como operar a planta
 
@@ -61,7 +61,7 @@ python3 -m unittest testes_da_refinaria -v   # auditoria externa independente
 │   ├── style.px.css ............... minério bruto — fonte da verdade, em px
 │   └── style.css .................. produto refinado — GERADO, não editar
 ├── refinaria_de_pixels.py ......... a planta industrial inteira
-└── testes_da_refinaria.py ......... auditoria externa (14 testes)
+└── testes_da_refinaria.py ......... auditoria externa (17 testes)
 ```
 
 ## Regras de segurança da planta industrial
@@ -73,11 +73,11 @@ python3 -m unittest testes_da_refinaria -v   # auditoria externa independente
 
 ## Números do último lote (nº 0001)
 
-- **16 medidas refinadas** — e por coincidência cósmica, todas divididas **por 16**. O universo piscou pra gente.
+- **21 medidas refinadas** — que, passadas pela própria refinaria, dão **`1.3125rem` de medidas**. No lote de 16 deu `1rem` cravado e o universo piscou pra gente; aí veio o PR de acessibilidade com mais 5 medidas e a coincidência cósmica foi rebaixada a número quebrado. Faltam 11 para a próxima piscadela (32 medidas, `2rem` redondos).
 - Funcionário do mês: **`24px`**, com 6 aparições (será homenageado virando `1.5rem` em todas elas).
-- Maior pixel já minerado: **`615px`** (largura do conteúdo), refinado em `38.4375rem` sem rachaduras.
+- Maior pixel já minerado: **`1000px`** (o breakpoint do mobile), refinado em `62.5rem` sem rachaduras. O antigo recordista, `615px` (largura do conteúdo), segue em `38.4375rem` com honra.
 - Caso mais delicado: **`21.5px`** de padding → `1.34375rem`. Cinco casas decimais. A plateia foi ao delírio.
-- Tempo total de refino: **0,71 ms**. Idas à calculadora poupadas: 16. Pixels feridos: **0**.
+- Tempo total de refino: **0,71 ms**. Idas à calculadora poupadas: 21. Pixels feridos: **0**.
 
 ## FAQ
 
@@ -124,12 +124,14 @@ Zero. Todos foram refinados com dignidade e seguem vivos no `style.px.css`, que 
 > Tudo rodado e verificado: 16/16 conversões exatas, zero px sobrando no produto final. Para a experiência completa: `python3 refinaria_de_pixels.py --dramatico`.
 >
 > — *ata lavrada pelo engenheiro-chefe da planta em 10/06/2026, às 18h40, no exato momento em que o `21.5px` virou `1.34375rem`*
+>
+> **Adendo de 16/10/2026:** a auditoria de acessibilidade elevou a jazida para **21 medidas** (21/21 conversões exatas, zero px sobrando). O presente do destino foi devolvido: o easter egg agora divide a própria contagem por 16 e só diz que o universo piscou quando o resultado sai redondo. Hoje sai `1.3125rem`. A suíte também cresceu para 17 testes, três deles só para vigiar a piscadela.
 
 ## A parte séria (juro que existe)
 
 Este é o portfólio do curso 3 de HTML/CSS (aula 5), cujo exercício real é trocar unidades absolutas (`px`) por relativas (`rem`). A regra é simples: **1rem = font-size do elemento raiz**, que por padrão é 16px em todos os navegadores — logo, `rem = px ÷ 16`. Usar `rem` torna o site acessível: quem aumenta a fonte no navegador vê todo o layout escalar junto, em vez de textos espremidos em caixas fixas.
 
-O script faz exatamente o que a aula pede, em todas as 16 medidas do CSS, com resultado matematicamente exato — ele só escolheu, deliberadamente, o caminho mais longo possível até lá.
+O script faz exatamente o que a aula pede, em todas as 21 medidas do CSS, com resultado matematicamente exato — ele só escolheu, deliberadamente, o caminho mais longo possível até lá.
 
 ## Estado, estrutura e como usar (sem piada)
 
