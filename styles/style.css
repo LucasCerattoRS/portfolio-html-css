@@ -2,7 +2,7 @@
    ARQUIVO GERADO PELA REFINARIA DE PIXELS S.A. — NÃO EDITE À MÃO.
    Fonte da verdade: styles/style.px.css (o minério bruto).
    Para recompilar:  python3 refinaria_de_pixels.py
-   Lote nº 0001 · 11/06/2026 07:17:41 · 16 medidas divididas por 16
+   Lote nº 0001 · 16/10/2026 17:40:37 · 21 medidas divididas por 16
    Auditoria de reversibilidade: 100% aprovada · pixels feridos: 0
    ════════════════════════════════════════════════════════════════ */
 
@@ -104,4 +104,37 @@ body{
     font-family: var(--fonte-secundaria);
     font-size: 1.5rem;
     font-weight: 400;
+}
+/* Acessibilidade: foco visível por teclado (o anel padrão some no fundo preto) */
+a:focus-visible{
+    outline: 0.1875rem solid var(--cor-terciaria);
+    outline-offset: 0.25rem;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile/tablet: sem largura fixa que estoure a tela, sem rolagem horizontal */
+@media (max-width: 62.5rem){
+    .cabecalho{
+        padding: 4% 8% 0% 8%;
+    }
+    .cabecalho__menu{
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    .apresentacao{
+        padding: 5% 8%;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    .apresentacao__conteudo{
+        width: 100%;
+    }
+    .apresentacao__links__link{
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
