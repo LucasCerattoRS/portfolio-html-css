@@ -51,7 +51,11 @@ CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA = Decimal("16")
 # Detector de pixels brutos na natureza: "24px", "21.5px", "615px"...
 # (\d*\.?\d+) também aceita ".5px": com \d+ na frente o ponto ficava de fora
 # e ".5px" virava ".0.3125rem" (CSS inválido).
-GARIMPO_DE_PIXEL = re.compile(r"(\d*\.?\d+)px\b")
+# As guardas em volta evitam garimpar dentro de nomes: "icone-24px.png",
+# ".col-8px", "a24px" e "24px_v2" ficam intactos. O sinal de negativo
+# continua valendo ("margin: -8px" vira "-0.5rem"): o hífen só bloqueia
+# quando vem grudado numa letra/dígito, como em "icone-24px".
+GARIMPO_DE_PIXEL = re.compile(r"(?<![\w.])(?<!\w-)(\d*\.?\d+)px(?![\w.-])")
 
 # Número de vezes que tudo isto poderia ter sido um Ctrl+H:
 OPORTUNIDADES_IGNORADAS = float("inf")

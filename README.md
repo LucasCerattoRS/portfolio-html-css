@@ -41,7 +41,7 @@ resultado = Decimal(x_px) / CONSTANTE_UNIVERSAL_DA_TIPOGRAFIA   # ou seja: x ÷ 
 | Auditoria de reversibilidade | Toda divisão é conferida na saída: se `resultado × 16 ≠ original`, a produção **para** e dispara `PixelInimaginavelError`. Nunca disparou. Nunca vai. A gente confere mesmo assim. |
 | Logging com carimbo de hora | Rastreabilidade total. Sabemos *exatamente* quando o `21.5px` virou `1.34375rem`. (Foi às 18:40:22. Momento lindo.) |
 | Modo `--dramatico` | Narra cada divisão como um lançamento de foguete, com pausa dramática de 0,45s por pixel. |
-| Suíte com 17 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
+| Suíte com 20 testes | Cobertura de 100% na operação de dividir por dezesseis, incluindo o teste `test_zero_pixels_viram_zero_rem_o_nada_e_preservado`. Dormimos tranquilos. |
 
 ## Como operar a planta
 
@@ -61,7 +61,7 @@ python3 -m unittest testes_da_refinaria -v   # auditoria externa independente
 │   ├── style.px.css ............... minério bruto — fonte da verdade, em px
 │   └── style.css .................. produto refinado — GERADO, não editar
 ├── refinaria_de_pixels.py ......... a planta industrial inteira
-└── testes_da_refinaria.py ......... auditoria externa (17 testes)
+└── testes_da_refinaria.py ......... auditoria externa (20 testes)
 ```
 
 ## Regras de segurança da planta industrial
@@ -160,12 +160,17 @@ O script faz exatamente o que a aula pede, em todas as 21 medidas do CSS, com re
 - Limites: não medi contraste de todas as combinações nem usei leitor de tela; as fontes do Google não carregam offline
   (usa fonte de fallback); links sociais continuam do template (ver pendências).
 
+### Revisão de 19/11/2026
+
+- O regex convertia `px` dentro de nomes (`url(icone-24px.png)` → `url(icone-1.5rem.png)`, `.col-8px`).
+  Agora não garimpa número grudado em letra, dígito, `_`, `.` ou em hífen precedido de letra/dígito, nem
+  `px` seguido de letra, `.` ou `-`. Negativos seguem valendo (`-8px` → `-0.5rem`). 3 testes novos (20 no total);
+  o `style.css` regerado sai idêntico (só muda o carimbo de hora).
+
 ### Pendências
 
 - Os links de redes sociais em `index.html` ainda apontam para os perfis dos instrutores do curso
   (template da Alura), não para os seus.
-- O regex também converteria `px` dentro de nomes, como `icone-24px.png` → `icone-1.5rem.png`. Não ocorre
-  neste CSS; se ocorrer, exigir que antes do número não haja letra/hífen.
 
 ### Para estudar
 
