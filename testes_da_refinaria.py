@@ -94,6 +94,23 @@ class TestLinhaDeProducao(unittest.TestCase):
         refinado = LinhaDeProducao().refinar_documento("a{border:.5px solid;}")
         self.assertEqual(refinado, "a{border:0.03125rem solid;}")
 
+    def test_pixel_dentro_de_nome_de_arquivo_nao_e_minerio(self):
+        css = ('a{background:url(icone-24px.png);}'
+               '.col-8px{gap:8px;}'
+               'b{background:url(a24px.svg) url(24px_v2.png) url(img/24px.png);}')
+        refinado = LinhaDeProducao().refinar_documento(css)
+        self.assertEqual(refinado, css.replace("gap:8px", "gap:0.5rem"))
+
+    def test_pixel_negativo_continua_negativo(self):
+        refinado = LinhaDeProducao().refinar_documento("p{margin:-8px 0 -.5px;}")
+        self.assertEqual(refinado, "p{margin:-0.5rem 0 -0.03125rem;}")
+
+    def test_pixel_colado_em_parenteses_e_virgulas_ainda_e_refinado(self):
+        refinado = LinhaDeProducao().refinar_documento(
+            "a{width:calc(100% - 24px);box-shadow:0 0 4px,1px 1px 2px;}")
+        self.assertEqual(refinado,
+            "a{width:calc(100% - 1.5rem);box-shadow:0 0 0.25rem,0.0625rem 0.0625rem 0.125rem;}")
+
     def test_o_relatorio_de_contagem_bate_com_a_producao(self):
         linha = LinhaDeProducao()
         linha.refinar_documento("p{margin:24px;padding:24px;gap:8px;}")
